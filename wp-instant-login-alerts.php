@@ -4,7 +4,7 @@
 Plugin Name: WP Instant Login Alerts 
 Plugin URI: https://giantwpsolutions.com
 Description: Enhance your WordPress website's security with WP Login Alerts. This essential plugin provides you with real-time email notifications whenever someone logs into your WP-admin area. Stay informed and vigilant against unauthorized access to your website, giving you the peace of mind you deserve. With WP Login Alerts, you're always in control of your WordPress security.
-Version: 1.0.0
+Version: 1.1.0
 Requires at least: 5.0
 Author: Habibur Rahman
 Author URI: https://habibr.me 
