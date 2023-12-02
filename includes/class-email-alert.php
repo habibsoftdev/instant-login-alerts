@@ -6,13 +6,12 @@
 class Email_Alert_Handler {
 
 
-    public function send_login_alert_email($user_login, $user_ip, $user_location, $recipient_email, $loginTime) {
+    public function send_login_alert_email($user_login, $user_ip, $user_location, $recipient_email_address, $loginTime) {
 
 
 
         // Get the recipient's email address (you can customize this)
-        $recipient_email = $recipient_email; // Change this to the desired recipient email address
-
+        $recipient_email = $recipient_email_address; 
         // Subject of the email
         $subject = __('Administrator Login Alert', 'wp-instant-login-alerts');
 
@@ -45,11 +44,11 @@ class Email_Alert_Handler {
     }
 
 
-    public function new_user_create_alert_email($user_login, $user_ip, $user_location, $recipient_email, $loginTime, $user){
+    public function new_user_create_alert_email($user_login, $user_ip, $user_location, $recipient_email_address, $loginTime, $user){
 
         
         // Get the recipient's email address (you can customize this)
-        $recipient_email = $recipient_email; // Change this to the desired recipient email address
+        $recipient_email = $recipient_email_address; // Change this to the desired recipient email address
 
         // Subject of the email
         $subject = __('New Administrator User Created', 'wp-instant-login-alerts');

@@ -5,9 +5,9 @@ class IPInfo_Handler{
     private $ipinfo_api_token;
 
 
-    public function __construct()
+    public function __construct($ipinfo_token)
     {
-        $this->ipinfo_api_token = '846a759915d66a';
+        $this->ipinfo_api_token = $ipinfo_token;
 
     }
 

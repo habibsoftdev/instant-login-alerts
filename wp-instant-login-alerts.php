@@ -25,7 +25,7 @@ class WPLoginAlerts{
         require_once plugin_dir_path(__FILE__).'includes/class-ipinfo-handler.php';
         require_once plugin_dir_path(__FILE__).'includes/class-email-alert.php';
 
-        $this->ipinfo_handler = new IPInfo_Handler();
+        
         $this->email_alert_handler = new Email_Alert_Handler();
 
 
@@ -94,8 +94,8 @@ class WPLoginAlerts{
 
           // Enqueue the CSS file
 
-        wp_enqueue_style('wpila-css', plugin_dir_url(__FILE__).'/assets/css/style.css', null, time());
-        wp_enqueue_style('wpila-email-css', plugin_dir_url(__FILE__).'/assets/css/email.css', null, time());
+        wp_enqueue_style('wpila-css', plugin_dir_url(__FILE__).'/assets/css/style.css', array(), time());
+        wp_enqueue_style('wpila-email-css', plugin_dir_url(__FILE__).'/assets/css/email.css', array(), time());
 
 
     }
@@ -142,7 +142,17 @@ class WPLoginAlerts{
 
             $alert_user_login_other_email = isset($_POST['alert_other_email']) ? $_POST['alert_other_email'] : '';
 
-            update_option('alert_other_email', $alert_user_login_other_email);  
+            update_option('alert_other_email', $alert_user_login_other_email); 
+            
+            if($alert_other_email_confirmation === 0 ){
+                delete_option('alert_other_email');
+            }
+
+            $user_location_token = isset($_POST['user_loc']) ? $_POST['user_loc'] : '';
+
+            update_option('user_loc', $user_location_token);
+
+
 
         }
 
@@ -156,6 +166,8 @@ class WPLoginAlerts{
         $alert_other_confirmation = get_option('alert_other_email_confirmation');
 
         $alert_other_email_address = get_option('alert_other_email');
+
+        $user_location_token_api = get_option('user_loc');
 
 
 
@@ -176,10 +188,7 @@ class WPLoginAlerts{
         if($alert_other_confirmation == 1){
             $checked3 = 'checked';
             
-        }else{
-            $class_disable = "disabled-div";
         }
-
         
 
 
@@ -216,7 +225,7 @@ class WPLoginAlerts{
                     </tr>
                 </table>
                 
-                <div class="wpila-other <?php echo esc_attr($class_disable); ?>">
+                <div class="wpila-other">
                     <table class="form-table">
                         <tr valign="top" >
                             <th scope="row"><?php _e('Your Alert Email Address ', 'wp-instant-login-alerts' ); ?> </th>
@@ -225,6 +234,18 @@ class WPLoginAlerts{
                             </td>
                         </tr>
                     </table>
+                </div>
+
+                <div class="wpila-other">
+                    <table class="form-table">
+                        <tr valign="top" >
+                            <th scope="row"><?php _e('Get User Location Info', 'wp-instant-login-alerts' ); ?> </th>
+                            <td>
+                                <input type="user_loc" name="user_loc" id="user_loc" value="<?php echo  $user_location_token_api; ?>"  />
+                            </td>
+                        </tr>
+                    </table>
+                    <p style="font-style:italic"> To Get Location Info insert your <a target="_blank" src="https://ipinfo.io/account/token"> IPInfo</a> Token (It's Free)</p>
                 </div>
 
                 
@@ -257,7 +278,6 @@ public function notify_admin_on_login(){
 
     $user_location = $this->ipinfo_handler->get_location($user_ip);
 
-
     $alert_other_email_confirmation = get_option('alert_other_email_confirmation');
 
     $alert_login_admin_email = get_option('alert_user_login_admin_email');
@@ -285,6 +305,10 @@ public function notify_admin_on_login(){
         $loginTime = time();
 
         $user_ip =  $_SERVER['REMOTE_ADDR'];
+
+        $user_loc_token = get_option('user_loc');
+
+        $this->ipinfo_handler = new IPInfo_Handler($user_loc_token);
 
         $user_location = $this->ipinfo_handler->get_location($user_ip);
 
