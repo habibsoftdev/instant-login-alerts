@@ -25,8 +25,9 @@ class WPLoginAlerts{
         require_once plugin_dir_path(__FILE__).'includes/class-ipinfo-handler.php';
         require_once plugin_dir_path(__FILE__).'includes/class-email-alert.php';
 
-        
+        $token = get_option('user_loc');
         $this->email_alert_handler = new Email_Alert_Handler();
+        $this->ipinfo_handler = new IPInfo_Handler($token);
 
 
 
@@ -276,6 +277,8 @@ public function notify_admin_on_login(){
 
     $user_ip =  $_SERVER['REMOTE_ADDR'];
 
+    $token = get_option('user_loc');
+
     $user_location = $this->ipinfo_handler->get_location($user_ip);
 
     $alert_other_email_confirmation = get_option('alert_other_email_confirmation');
@@ -284,12 +287,19 @@ public function notify_admin_on_login(){
 
     if($alert_login_admin_email== 1){
 
-        $this->email_alert_handler->send_login_alert_email($user_login, $user_ip, $user_location, $recipient_admin_email, $loginTime);
+        if(!empty($token)){
+            $this->email_alert_handler->send_login_alert_email($user_login, $user_ip, $user_location, $recipient_admin_email, $loginTime);
+        }else{
+
+        $this->email_alert_handler->send_login_alert_email_without_location($user_login, $user_ip,  $recipient_admin_email, $loginTime);}
     }
 
     if($alert_other_email_confirmation == 1 && !empty($recipient_email)){
-
-        $this->email_alert_handler->send_login_alert_email($user_login, $user_ip, $user_location, $recipient_email, $loginTime); 
+        if(!empty($token)){
+        $this->email_alert_handler->send_login_alert_email($user_login, $user_ip, $user_location, $recipient_email, $loginTime); }
+        else{
+            $this->email_alert_handler->send_login_alert_email_without_location($user_login, $user_ip, $recipient_email, $loginTime);
+        }
     }
 
     }
@@ -298,6 +308,7 @@ public function notify_admin_on_login(){
     
 
     public function notify_on_new_admin_user($user_id){
+        
         $current_user = wp_get_current_user();
 
         $user_login = $current_user->user_login;
@@ -306,9 +317,7 @@ public function notify_admin_on_login(){
 
         $user_ip =  $_SERVER['REMOTE_ADDR'];
 
-        $user_loc_token = get_option('user_loc');
-
-        $this->ipinfo_handler = new IPInfo_Handler($user_loc_token);
+        $token = get_option('user_loc');
 
         $user_location = $this->ipinfo_handler->get_location($user_ip);
 
@@ -325,13 +334,21 @@ public function notify_admin_on_login(){
 
         if ($alert_on_new_user == 1 && in_array('administrator', $user->roles)) {
 
-            $this->email_alert_handler->new_user_create_alert_email($user_login, $user_ip, $user_location, $recipient_admin_email, $loginTime, $user);
+            if(!empty($token)){
+            $this->email_alert_handler->new_user_create_alert_email($user_login, $user_ip, $user_location, $recipient_admin_email, $loginTime, $user);}else{
+
+                $this->email_alert_handler->new_user_create_alert_email_without_location($user_login, $user_ip, $recipient_admin_email, $loginTime, $user);
+            }
 
         }
 
         if ($alert_on_new_user == 1 && $alert_other_email_confirmation == 1 && !empty($recipient_email) && in_array('administrator', $user->roles)) {
 
-            $this->email_alert_handler->new_user_create_alert_email($user_login, $user_ip, $user_location, $recipient_email, $loginTime, $user);
+            if(!empty($token)){
+            $this->email_alert_handler->new_user_create_alert_email($user_login, $user_ip, $user_location, $recipient_email, $loginTime, $user);}else{
+
+                $this->email_alert_handler->new_user_create_alert_email_without_location($user_login, $user_ip, $recipient_email, $loginTime, $user);
+            }
         }
 
 
