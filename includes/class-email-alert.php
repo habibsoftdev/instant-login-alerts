@@ -13,7 +13,7 @@ class Email_Alert_Handler {
         // Get the recipient's email address
         $recipient_email = $recipient_email_address; 
         // Subject of the email
-        $subject = __('Administrator Login Alert', 'wp-instant-login-alerts');
+        $subject = __('Administrator Login Alert', 'instant-login-alerts');
      
         // Compose the email message
         $message = 'Administrator ' . $user_login . ' has logged into the WordPress admin area.' . "\n";
@@ -45,7 +45,7 @@ class Email_Alert_Handler {
         // Get the recipient's email address
         $recipient_email = $recipient_email_address; 
         // Subject of the email
-        $subject = __('Administrator Login Alert', 'wp-instant-login-alerts');
+        $subject = __('Administrator Login Alert', 'instant-login-alerts');
    
         // Compose the email message
         $message = 'Administrator ' . $user_login . ' has logged into the WordPress admin area.' . "\n";
@@ -78,12 +78,12 @@ class Email_Alert_Handler {
         // Get the recipient's email address
         $recipient_email = $recipient_email_address;
         // Subject of the email
-        $subject = __('New Administrator User Created', 'wp-instant-login-alerts');
+        $subject = __('New Administrator User Created', 'instant-login-alerts');
         
         
         // Compose the email message
         $message =  sprintf(
-            __('A new administrator user (%s) has been created in WordPress. Email Used (%s) ', 'wp-instant-login-alerts'),
+            __('A new administrator user (%s) has been created in WordPress. Email Used (%s) ', 'instant-login-alerts'),
             $user->user_login, $user->user_email
         );
 
@@ -116,12 +116,12 @@ class Email_Alert_Handler {
         // Get the recipient's email address 
         $recipient_email = $recipient_email_address; 
         // Subject of the email
-        $subject = __('New Administrator User Created', 'wp-instant-login-alerts');
+        $subject = __('New Administrator User Created', 'instant-login-alerts');
         
         
         // Compose the email message
         $message =  sprintf(
-            __('A new administrator user (%s) has been created in WordPress. Email Used (%s)', 'wp-instant-login-alerts'),
+            __('A new administrator user (%s) has been created in WordPress. Email Used (%s)', 'instant-login-alerts'),
             $user->user_login, $user->user_email
         );
 

@@ -1,19 +1,19 @@
 <?php 
 
 /*
-Plugin Name: WP Instant Login Alerts 
+Plugin Name: Instant Login Alerts 
 Plugin URI: https://giantwpsolutions.com
-Description: Enhance your WordPress website's security with WP Login Alerts. This essential plugin provides you with real-time email notifications whenever someone logs into your WP-admin area. Stay informed and vigilant against unauthorized access to your website, giving you the peace of mind you deserve. With WP Login Alerts, you're always in control of your WordPress security.
+Description: Enhance your WordPress website's security with Instant Login Alerts. This essential plugin provides you with real-time email notifications whenever someone logs into your WP-admin area. Stay informed and vigilant against unauthorized access to your website, giving you the peace of mind you deserve. With Instant Login Alerts, you're always in control of your WordPress security.
 Version: 1.1.0
 Requires at least: 5.3
 Author: Habibur Rahman
 Author URI: https://habibr.me 
 License: GPLv2 or later
-Text Domain: wp-instant-login-alerts
+Text Domain: instant-login-alerts
 Domain Path: /languages/
 */
 
-class WPLoginAlerts{
+class InstantLoginAlerts{
 
     private $ipinfo_handler;
     private $email_alert_handler;
@@ -55,7 +55,7 @@ class WPLoginAlerts{
 
     public function wpila_plugin_bootstraping(){
 
-        load_plugin_textdomain('wp-instant-login-alerts', false, plugin_dir_path(__FILE__).'/languages');
+        load_plugin_textdomain('instant-login-alerts', false, plugin_dir_path(__FILE__).'/languages');
     }
 
     //Plugin Redirect to settings and action link
@@ -70,7 +70,7 @@ class WPLoginAlerts{
 
     public function wpila_plugin_actions($links){
     
-        $links[] = sprintf("<a href='%s'> %s </a>", admin_url('tools.php?page=wpila_settings'), __('Settings', 'wp-instant-login-alerts' ));
+        $links[] = sprintf("<a href='%s'> %s </a>", admin_url('tools.php?page=wpila_settings'), __('Settings', 'instant-login-alerts' ));
         return $links;
     }
 
@@ -97,7 +97,7 @@ class WPLoginAlerts{
     public function wpila_add_submenu_page(){
 
         add_submenu_page('tools.php', 
-            'WP Login Alerts Settings', 
+            'Instant Login Alerts Settings', 
             'Instant Login Alerts',
             'manage_options', 
             'wpila_settings',
@@ -185,14 +185,14 @@ class WPLoginAlerts{
 
         <div class="wrap">
       
-            <h2>WP Login Instant Alert Settings</h2>
+            <h2> <?php _e('Instant Login Alert Settings', 'instant-login-alerts'); ?></h2>
 
             <section>
                 <form method="post" action="<?php echo esc_url(admin_url('tools.php?page=wpila_settings')); ?>">
                     <table class="form-table">
                         <tr valign="top">
                             <th scope="row">
-                                <?php _e('Alert on New Administrative User Create: ', 'wp-instant-login-alerts' ); ?>
+                                <?php _e('Alert on New Administrative User Create: ', 'instant-login-alerts' ); ?>
                             </th>
                             <td>
                                 <input type="checkbox" name="alert_on_new_user" id="alert_on_new_user" value="1" <?php echo esc_attr($checked); ?> />
@@ -201,13 +201,13 @@ class WPLoginAlerts{
 
                         <tr valign="top">
                             <th scope="row">
-                                <?php _e('Alert Email', 'wp-instant-login-alerts'); ?>
+                                <?php _e('Alert Email', 'instant-login-alerts'); ?>
                             </th>
                             <td>
                              <label for="wpila_admin_email">
-                                <input type="checkbox" value="1" name="wpila_admin_email" id="wpila_admin_email"  <?php echo esc_attr($checked2); ?>> <?php _e('Admin Email', 'wp-instant-login-alerts'); ?> 
+                                <input type="checkbox" value="1" name="wpila_admin_email" id="wpila_admin_email"  <?php echo esc_attr($checked2); ?>> <?php _e('Admin Email', 'instant-login-alerts'); ?> 
                             </label> <br>
-                            <label for="wpila_other_email"><input type="checkbox" value="1" name="wpila_other_email" id="wpila_other_email" <?php echo esc_attr($checked3); ?>> <?php _e('Others Email', 'wp-instant-login-alerts'); ?></label>
+                            <label for="wpila_other_email"><input type="checkbox" value="1" name="wpila_other_email" id="wpila_other_email" <?php echo esc_attr($checked3); ?>> <?php _e('Others Email', 'instant-login-alerts'); ?></label>
                         </td>
                     </tr>
                 </table>
@@ -215,7 +215,7 @@ class WPLoginAlerts{
                 <div class="wpila-other">
                     <table class="form-table">
                         <tr valign="top" >
-                            <th scope="row"><?php _e('Your Alert Email Address ', 'wp-instant-login-alerts' ); ?> </th>
+                            <th scope="row"><?php _e('Your Alert Email Address ', 'instant-login-alerts' ); ?> </th>
                             <td>
                                 <input type="email" name="alert_other_email" id="alert_other_email" value="<?php echo $alert_other_email_address ; ?>"  />
                             </td>
@@ -226,13 +226,13 @@ class WPLoginAlerts{
                 <div class="wpila">
                     <table class="form-table">
                         <tr valign="top" >
-                            <th scope="row"><?php _e('Get User Location Info', 'wp-instant-login-alerts' ); ?> </th>
+                            <th scope="row"><?php _e('Get User Location Info', 'instant-login-alerts' ); ?> </th>
                             <td>
                                 <input type="user_loc" name="user_loc" id="user_loc" value="<?php echo  $user_location_token_api; ?>"  />
                             </td>
                         </tr>
                     </table>
-                    <p class="font-italic"> <?php _e("To Get Location Info insert your <a target='_blank' src='https://ipinfo.io/account/token'> IPInfo</a> Token (It's Free)", "wp-instant-login-alerts");?></p>
+                    <p class="font-italic"> <?php _e("To Get Location Info insert your <a target='_blank' src='https://ipinfo.io/account/token'> IPInfo</a> Token (It's Free)", "instant-login-alerts");?></p>
                 </div>
 
                 
@@ -343,6 +343,6 @@ class WPLoginAlerts{
 }
 
 // Instantiate the plugin class
-new WPLoginAlerts();
+new InstantLoginAlerts();
 
 

@@ -1,4 +1,4 @@
-=== WP Instant Login Alerts ===
+=== Instant Login Alerts ===
 Contributors: developerhabib
 Tags: security, login, alert, notification, user, admin,
 Requires at least: 5.3
@@ -8,7 +8,7 @@ License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
 Stable tag: 1.0
 
-Enhance your WordPress website's security with WP Login Alerts. This essential plugin provides you with real-time email notifications whenever someone logs into your WP-admin area. Stay informed and vigilant against unauthorized access to your website, giving you the peace of mind you deserve. With WP Login Alerts, you're always in control of your WordPress security.
+Enhance your WordPress website's security with Instant Login Alerts. This essential plugin provides you with real-time email notifications whenever someone logs into your WP-admin area. Stay informed and vigilant against unauthorized access to your website, giving you the peace of mind you deserve. With Instant Login Alerts, you're always in control of your WordPress security.
 
 == Description ==
 
