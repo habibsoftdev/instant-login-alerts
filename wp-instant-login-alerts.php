@@ -46,20 +46,11 @@ class WPLoginAlerts{
 
         add_action('user_register', array($this, 'notify_on_new_admin_user'));
 
-        add_action('admin_init', array($this,'hide_plugin_editor_and_theme_editor'));
-
         add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'wpila_plugin_actions'));
        
        
     }
 
-    function hide_plugin_editor_and_theme_editor() {
-        // Hide the Plugin Editor and Theme Editor
-        define('DISALLOW_FILE_EDIT', true);
-    }
-
-
-    
      // Plugin Text Domain Loading
 
     public function wpila_plugin_bootstraping(){
@@ -89,22 +80,17 @@ class WPLoginAlerts{
 
     public function wpila_plugin_asset_register(){
 
-        // Enqueue the JavaScript file
+    // Enqueue the JavaScript file
 
         wp_enqueue_script('wplia-js', plugin_dir_url(__FILE__).'/assets/js/main.js', array('jquery'), time(), true);
 
-          // Enqueue the CSS file
+    // Enqueue the CSS file
 
         wp_enqueue_style('wpila-css', plugin_dir_url(__FILE__).'/assets/css/style.css', array(), time());
         wp_enqueue_style('wpila-email-css', plugin_dir_url(__FILE__).'/assets/css/email.css', array(), time());
 
 
     }
-
-    //Notices callback
-
-
-
 
     // Callback function to add the submenu
 
@@ -263,44 +249,43 @@ class WPLoginAlerts{
 
 
 
-public function notify_admin_on_login(){
+    public function notify_admin_on_login(){
 
-    $user = wp_get_current_user();
+        $user = wp_get_current_user();
 
-    $user_login = $user->user_login;
+        $user_login = $user->user_login;
 
-    $recipient_email = get_option('alert_other_email');
+        $recipient_email = get_option('alert_other_email');
 
-    $recipient_admin_email = get_option('admin_email');
+        $recipient_admin_email = get_option('admin_email');
 
-    $loginTime = time();
+        $loginTime = time();
 
-    $user_ip =  $_SERVER['REMOTE_ADDR'];
+        $user_ip =  $_SERVER['REMOTE_ADDR'];
 
-    $token = get_option('user_loc');
+        $token = get_option('user_loc');
 
-    $user_location = $this->ipinfo_handler->get_location($user_ip);
+        $user_location = $this->ipinfo_handler->get_location($user_ip);
 
-    $alert_other_email_confirmation = get_option('alert_other_email_confirmation');
+        $alert_other_email_confirmation = get_option('alert_other_email_confirmation');
 
-    $alert_login_admin_email = get_option('alert_user_login_admin_email');
+        $alert_login_admin_email = get_option('alert_user_login_admin_email');
 
-    if($alert_login_admin_email== 1){
+        if($alert_login_admin_email== 1){
 
-        if(!empty($token)){
-            $this->email_alert_handler->send_login_alert_email($user_login, $user_ip, $user_location, $recipient_admin_email, $loginTime);
-        }else{
+            if(!empty($token)){
+                $this->email_alert_handler->send_login_alert_email($user_login, $user_ip, $user_location, $recipient_admin_email, $loginTime);}else{
 
-        $this->email_alert_handler->send_login_alert_email_without_location($user_login, $user_ip,  $recipient_admin_email, $loginTime);}
+                $this->email_alert_handler->send_login_alert_email_without_location($user_login, $user_ip,  $recipient_admin_email, $loginTime);}
     }
 
-    if($alert_other_email_confirmation == 1 && !empty($recipient_email)){
-        if(!empty($token)){
-        $this->email_alert_handler->send_login_alert_email($user_login, $user_ip, $user_location, $recipient_email, $loginTime); }
-        else{
-            $this->email_alert_handler->send_login_alert_email_without_location($user_login, $user_ip, $recipient_email, $loginTime);
+        if($alert_other_email_confirmation == 1 && !empty($recipient_email)){
+            if(!empty($token)){
+                $this->email_alert_handler->send_login_alert_email($user_login, $user_ip, $user_location, $recipient_email, $loginTime); } else{
+
+                $this->email_alert_handler->send_login_alert_email_without_location($user_login, $user_ip, $recipient_email, $loginTime);
+            }
         }
-    }
 
     }
 
