@@ -1,5 +1,8 @@
 .disabled-div {
-	pointer-events: none !important; /* Prevents interactions with content */
-	opacity: 0.4;         /* Reduces opacity to visually indicate disabled state */
+  pointer-events: none !important; /* Prevents interactions with content */
+  opacity: 0.4; /* Reduces opacity to visually indicate disabled state */
 }
 
+.form-table th {
+  font-weight: 500 !important;
+}

@@ -5,7 +5,7 @@ Plugin Name: WP Instant Login Alerts
 Plugin URI: https://giantwpsolutions.com
 Description: Enhance your WordPress website's security with WP Login Alerts. This essential plugin provides you with real-time email notifications whenever someone logs into your WP-admin area. Stay informed and vigilant against unauthorized access to your website, giving you the peace of mind you deserve. With WP Login Alerts, you're always in control of your WordPress security.
 Version: 1.1.0
-Requires at least: 5.0
+Requires at least: 5.3
 Author: Habibur Rahman
 Author URI: https://habibr.me 
 License: GPLv2 or later
@@ -86,8 +86,8 @@ class WPLoginAlerts{
 
     // Enqueue the CSS file
 
-        wp_enqueue_style('wpila-css', plugin_dir_url(__FILE__).'/assets/css/style.css', array(), time());
-        wp_enqueue_style('wpila-email-css', plugin_dir_url(__FILE__).'/assets/css/email.css', array(), time());
+        wp_enqueue_style('wpila-css', plugin_dir_url(__FILE__).'/assets/css/style.css', array(), '1.0');
+        wp_enqueue_style('wpila-email-css', plugin_dir_url(__FILE__).'/assets/css/email.css', array(), '1.0');
 
 
     }
@@ -223,7 +223,7 @@ class WPLoginAlerts{
                     </table>
                 </div>
 
-                <div class="wpila-other">
+                <div class="wpila">
                     <table class="form-table">
                         <tr valign="top" >
                             <th scope="row"><?php _e('Get User Location Info', 'wp-instant-login-alerts' ); ?> </th>
@@ -232,7 +232,7 @@ class WPLoginAlerts{
                             </td>
                         </tr>
                     </table>
-                    <p style="font-style:italic"> To Get Location Info insert your <a target="_blank" src="https://ipinfo.io/account/token"> IPInfo</a> Token (It's Free)</p>
+                    <p class="font-italic"> <?php _e("To Get Location Info insert your <a target='_blank' src='https://ipinfo.io/account/token'> IPInfo</a> Token (It's Free)", "wp-instant-login-alerts");?></p>
                 </div>
 
                 
