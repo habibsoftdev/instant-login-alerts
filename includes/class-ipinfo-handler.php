@@ -1,37 +1,28 @@
 <?php 
 // includes/class-ipinfo-handler.php
 
-class IPInfo_Handler{
+
+
+
+class IPInfo_Handler {
     private $ipinfo_api_token;
 
-
-    public function __construct($ipinfo_token=null)
-    {
+    public function __construct($ipinfo_token = null) {
         $this->ipinfo_api_token = $ipinfo_token;
-
     }
 
-    public function get_location($ip){
+    public function get_location($ip) {
+        $ipinfo_api_url = 'https://ipinfo.io/' . $ip . '/json?token=' . $this->ipinfo_api_token;
 
-        $ch = curl_init();
+        $response = wp_remote_get($ipinfo_api_url);
 
-        $ipinfo_api_url = 'https://ipinfo.io/'.$ip. '/json?token='.$this->ipinfo_api_token;
-
-        curl_setopt($ch, CURLOPT_URL, $ipinfo_api_url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $response = curl_exec($ch);
-
-        if(curl_errno($ch)){
+        if (is_wp_error($response)) {
             return false;
         }
 
-        curl_close($ch);
-
-        $data = json_decode($response);
+        $body = wp_remote_retrieve_body($response);
+        $data = json_decode($body);
 
         return $data;
-
     }
-
-
 }
