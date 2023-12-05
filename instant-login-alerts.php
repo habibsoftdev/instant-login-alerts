@@ -13,18 +13,18 @@ Domain Path: /languages/
 */
 
 // Avoid direct access to plugin file
-if (!defined('ABSPATH')) {
+if (! defined('ABSPATH') ) {
     exit; // Exit if accessed directly
 }
 
 class InstantLoginAlerts {
 
     // Constants for option names
-    const OPTION_NEW_USER_ALERT = 'alert_on_create_user';
-    const OPTION_LOGIN_ADMIN_EMAIL = 'alert_user_login_admin_email';
+    const OPTION_NEW_USER_ALERT           = 'alert_on_create_user';
+    const OPTION_LOGIN_ADMIN_EMAIL        = 'alert_user_login_admin_email';
     const OPTION_OTHER_EMAIL_CONFIRMATION = 'alert_other_email_confirmation';
-    const OPTION_OTHER_EMAIL = 'alert_other_email';
-    const OPTION_USER_LOC = 'user_loc';
+    const OPTION_OTHER_EMAIL              = 'alert_other_email';
+    const OPTION_USER_LOC                 = 'user_loc';
 
     private $ipinfo_handler;
     private $email_alert_handler;
@@ -37,9 +37,9 @@ class InstantLoginAlerts {
         require_once plugin_dir_path(__FILE__) . 'includes/class-ipinfo-handler.php';
         require_once plugin_dir_path(__FILE__) . 'includes/class-email-alert.php';
 
-        $token = get_option(self::OPTION_USER_LOC);
+        $token                     = get_option(self::OPTION_USER_LOC);
         $this->email_alert_handler = new Email_Alert_Handler();
-        $this->ipinfo_handler = new IPInfo_Handler($token);
+        $this->ipinfo_handler      = new IPInfo_Handler($token);
 
         // Add hooks and actions
         add_action('plugin_loaded', array($this, 'wpila_plugin_bootstraping'));
@@ -64,8 +64,8 @@ class InstantLoginAlerts {
      * @param string $plugin
      */
     public function wpila_plugin_redirect_settings($plugin) {
-        if (plugin_basename(__FILE__) == $plugin) {
-            wp_redirect(admin_url('tools.php?page=wpila_settings'));
+        if ( plugin_basename(__FILE__) == $plugin ) {
+            wp_redirect( admin_url( 'tools.php?page=wpila_settings' ) );
             die();
         }
     }
@@ -76,8 +76,10 @@ class InstantLoginAlerts {
      * @param array $links
      * @return array
      */
-    public function wpila_plugin_actions($links) {
-        $links[] = sprintf("<a href='%s'> %s </a>", esc_url(admin_url('tools.php?page=wpila_settings')), esc_html__('Settings', 'instant-login-alerts'));
+    public function wpila_plugin_actions( $links ) {
+
+        $links[] = sprintf( "<a href='%s'> %s </a>", esc_url(admin_url( 'tools.php?page=wpila_settings' )), esc_html__( 'Settings', 'instant-login-alerts' ) );
+
         return $links;
     }
 
@@ -86,10 +88,10 @@ class InstantLoginAlerts {
      */
     public function wpila_plugin_asset_register() {
         // Enqueue the JavaScript file
-        wp_enqueue_script('wplia-js', plugin_dir_url(__FILE__) . '/assets/js/main.js', array('jquery'), '1.0', true);
+        wp_enqueue_script( 'wplia-js', plugin_dir_url(__FILE__) . '/assets/js/main.js', array('jquery'), '1.0', true );
         // Enqueue the CSS file
-        wp_enqueue_style('wpila-css', plugin_dir_url(__FILE__) . '/assets/css/style.css', array(), '1.0');
-        wp_enqueue_style('wpila-email-css', plugin_dir_url(__FILE__) . '/assets/css/email.css', array(), '1.0');
+        wp_enqueue_style(' wpila-css', plugin_dir_url(__FILE__) . '/assets/css/style.css', array(), '1.0' );
+        wp_enqueue_style( 'wpila-email-css', plugin_dir_url(__FILE__) . '/assets/css/email.css', array(), '1.0' );
     }
 
     /**
@@ -102,7 +104,7 @@ class InstantLoginAlerts {
             'Instant Login Alerts',
             'manage_options',
             'wpila_settings',
-            array($this, 'wpila_settings_page')
+            array( $this, 'wpila_settings_page' )
         );
     }
 
@@ -110,52 +112,52 @@ class InstantLoginAlerts {
      * Display the settings page
      */
     public function wpila_settings_page() {
-        if (isset($_POST['submit'])) {
-            $alert_on_create_user = isset($_POST['alert_on_new_user']) ? 1 : 0;
+        if ( isset( $_POST['submit'] ) ) {
+            $alert_on_create_user = isset( $_POST['alert_on_new_user'] ) ? 1 : 0;
             update_option(self::OPTION_NEW_USER_ALERT, $alert_on_create_user);
 
-            $alert_user_login_admin_email = isset($_POST['wpila_admin_email']) ? 1 : 0;
-            update_option(self::OPTION_LOGIN_ADMIN_EMAIL, $alert_user_login_admin_email);
+            $alert_user_login_admin_email = isset( $_POST['wpila_admin_email'] ) ? 1 : 0;
+            update_option( self::OPTION_LOGIN_ADMIN_EMAIL, $alert_user_login_admin_email );
 
-            $alert_other_email_confirmation = isset($_POST['wpila_other_email']) ? 1 : 0;
+            $alert_other_email_confirmation = isset( $_POST['wpila_other_email'] ) ? 1 : 0;
             update_option(self::OPTION_OTHER_EMAIL_CONFIRMATION, $alert_other_email_confirmation);
 
-            $alert_user_login_other_email = isset($_POST['alert_other_email']) ? sanitize_email($_POST['alert_other_email']) : '';
-            update_option(self::OPTION_OTHER_EMAIL, $alert_user_login_other_email);
+            $alert_user_login_other_email = isset( $_POST['alert_other_email'] ) ? sanitize_email( $_POST['alert_other_email'] ) : '';
+            update_option( self::OPTION_OTHER_EMAIL, $alert_user_login_other_email );
 
-            if ($alert_other_email_confirmation === 0) {
-                delete_option(self::OPTION_OTHER_EMAIL);
+            if ( $alert_other_email_confirmation === 0 ) {
+                delete_option( self::OPTION_OTHER_EMAIL );
             }
 
-            $user_location_token = isset($_POST['user_loc']) ? sanitize_text_field($_POST['user_loc']) : '';
-            update_option(self::OPTION_USER_LOC, $user_location_token);
+            $user_location_token = isset( $_POST['user_loc'] ) ? sanitize_text_field( $_POST['user_loc'] ) : '';
+            update_option( self::OPTION_USER_LOC, $user_location_token );
         }
 
         // Retrieve saved options
-        $alert_on_new_user = get_option(self::OPTION_NEW_USER_ALERT);
-        $alert_login_admin_email = get_option(self::OPTION_LOGIN_ADMIN_EMAIL);
-        $alert_other_confirmation = get_option(self::OPTION_OTHER_EMAIL_CONFIRMATION);
-        $alert_other_email_address = get_option(self::OPTION_OTHER_EMAIL);
-        $user_location_token_api = get_option(self::OPTION_USER_LOC);
+        $alert_on_new_user         = get_option( self::OPTION_NEW_USER_ALERT );
+        $alert_login_admin_email   = get_option( self::OPTION_LOGIN_ADMIN_EMAIL );
+        $alert_other_confirmation  = get_option( self::OPTION_OTHER_EMAIL_CONFIRMATION );
+        $alert_other_email_address = get_option( self::OPTION_OTHER_EMAIL );
+        $user_location_token_api   = get_option( self::OPTION_USER_LOC );
 
         // Checkbox Checked on save
-        $checked = $alert_on_new_user ? 'checked' : '';
+        $checked  = $alert_on_new_user ? 'checked' : '';
         $checked2 = $alert_login_admin_email ? 'checked' : '';
         $checked3 = $alert_other_confirmation ? 'checked' : '';
 
         // Display Section One of the form
         ?>
         <div class="wrap">
-            <h2> <?php _e('Instant Login Alert Settings', 'instant-login-alerts'); ?></h2>
+            <h2> <?php _e( 'Instant Login Alert Settings', 'instant-login-alerts' ); ?></h2>
             <section>
-                <form method="post" action="<?php echo esc_url(admin_url('tools.php?page=wpila_settings')); ?>">
+                <form method="post" action="<?php echo esc_url( admin_url('tools.php?page=wpila_settings' )); ?>">
                     <table class="form-table">
                         <tr valign="top">
                             <th scope="row">
                                 <?php _e('Alert on New Administrative User Create: ', 'instant-login-alerts'); ?>
                             </th>
                             <td>
-                                <input type="checkbox" name="alert_on_new_user" id="alert_on_new_user" value="1" <?php echo esc_attr($checked); ?> />
+                                <input type="checkbox" name="alert_on_new_user" id="alert_on_new_user" value="1" <?php echo esc_attr( $checked ); ?> />
                             </td>
                         </tr>
                         <tr valign="top">
@@ -164,9 +166,9 @@ class InstantLoginAlerts {
                             </th>
                             <td>
                                 <label for="wpila_admin_email">
-                                    <input type="checkbox" value="1" name="wpila_admin_email" id="wpila_admin_email" <?php echo esc_attr($checked2); ?>> <?php _e('Admin Email', 'instant-login-alerts'); ?>
+                                    <input type="checkbox" value="1" name="wpila_admin_email" id="wpila_admin_email" <?php echo esc_attr( $checked2 ); ?>> <?php _e('Admin Email', 'instant-login-alerts'); ?>
                                 </label> <br>
-                                <label for="wpila_other_email"><input type="checkbox" value="1" name="wpila_other_email" id="wpila_other_email" <?php echo esc_attr($checked3); ?>> <?php _e('Others Email', 'instant-login-alerts'); ?></label>
+                                <label for="wpila_other_email"><input type="checkbox" value="1" name="wpila_other_email" id="wpila_other_email" <?php echo esc_attr( $checked3 ); ?>> <?php _e( 'Others Email', 'instant-login-alerts' ); ?></label>
                             </td>
                         </tr>
                     </table>
@@ -174,9 +176,9 @@ class InstantLoginAlerts {
                     <div class="wpila-other">
                         <table class="form-table">
                             <tr valign="top">
-                                <th scope="row"><?php _e('Your Alert Email Address ', 'instant-login-alerts'); ?> </th>
+                                <th scope="row"><?php _e( 'Your Alert Email Address ', 'instant-login-alerts' ); ?> </th>
                                 <td>
-                                    <input type="email" name="alert_other_email" id="alert_other_email" value="<?php echo esc_attr($alert_other_email_address); ?>" />
+                                    <input type="email" name="alert_other_email" id="alert_other_email" value="<?php echo esc_attr( $alert_other_email_address ); ?>" />
                                 </td>
                             </tr>
                         </table>
@@ -185,16 +187,16 @@ class InstantLoginAlerts {
                     <div class="wpila">
                         <table class="form-table">
                             <tr valign="top">
-                                <th scope="row"><?php _e('Get User Location Info', 'instant-login-alerts'); ?> </th>
+                                <th scope="row"><?php _e( 'Get User Location Info', 'instant-login-alerts' ); ?> </th>
                                 <td>
-                                    <input type="user_loc" name="user_loc" id="user_loc" value="<?php echo esc_attr($user_location_token_api); ?>" />
+                                    <input type="user_loc" name="user_loc" id="user_loc" value="<?php echo esc_attr( $user_location_token_api ); ?>" />
                                 </td>
                             </tr>
                         </table>
-                        <p class="font-italic"> <?php _e("To Get Location Info insert your <a target='_blank' src='https://ipinfo.io/account/token'> IPInfo</a> Token (It's Free)", "instant-login-alerts"); ?></p>
+                        <p class="font-italic"> <?php _e( "To Get Location Info insert your <a target='_blank' src='https://ipinfo.io/account/token'> IPInfo</a> Token (It's Free)", "instant-login-alerts" ); ?></p>
                     </div>
 
-                    <?php submit_button("Save Changes", 'primary', 'submit'); ?>
+                    <?php submit_button( "Save Changes", 'primary', 'submit' ); ?>
 
                 </form>
             </section>
@@ -207,16 +209,16 @@ class InstantLoginAlerts {
      */
     public function notify_admin_on_login() {
 
-        $user = wp_get_current_user();
-        $user_login = $user->user_login;
-        $recipient_email = get_option('alert_other_email');
-        $recipient_admin_email = get_option('admin_email');
-        $loginTime = time();
-        $user_ip =  filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP);
-        $token = get_option('user_loc');
-        $user_location = $this->ipinfo_handler->get_location($user_ip);
+        $user                           = wp_get_current_user();
+        $user_login                     = $user->user_login;
+        $recipient_email                = get_option('alert_other_email');
+        $recipient_admin_email          = get_option('admin_email');
+        $loginTime                      = time();
+        $user_ip                        = filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP);
+        $token                          = get_option('user_loc');
+        $user_location                  = $this->ipinfo_handler->get_location($user_ip);
         $alert_other_email_confirmation = get_option('alert_other_email_confirmation');
-        $alert_login_admin_email = get_option('alert_user_login_admin_email');
+        $alert_login_admin_email        = get_option('alert_user_login_admin_email');
 
             if($alert_login_admin_email== 1){
 
@@ -241,16 +243,17 @@ class InstantLoginAlerts {
      * @param int $user_id
      */
     public function notify_on_new_admin_user($user_id) {
-        $current_user = wp_get_current_user();
-        $user_login = $current_user->user_login;
-        $loginTime = time();
-        $user_ip =  filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP);
-        $token = get_option('user_loc');
-        $user_location = $this->ipinfo_handler->get_location($user_ip);
-        $user = get_userdata($user_id);
-        $alert_on_new_user = get_option('alert_on_create_user');
-        $recipient_email = get_option('alert_other_email');
-        $recipient_admin_email = get_option('admin_email');
+
+        $current_user                   = wp_get_current_user();
+        $user_login                     = $current_user->user_login;
+        $loginTime                      = time();
+        $user_ip                        = filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP);
+        $token                          = get_option('user_loc');
+        $user_location                  = $this->ipinfo_handler->get_location($user_ip);
+        $user                           = get_userdata($user_id);
+        $alert_on_new_user              = get_option('alert_on_create_user');
+        $recipient_email                = get_option('alert_other_email');
+        $recipient_admin_email          = get_option('admin_email');
         $alert_other_email_confirmation = get_option('alert_other_email_confirmation');
 
 
